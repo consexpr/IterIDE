@@ -1,0 +1,21 @@
+.nv-logo {
+    flex: none;
+    display: block;
+    object-fit: contain;
+}
+.nv-wordmark {
+    font-family: var(--brand-font, 'Bahnschrift', 'Segoe UI Variable Display', 'Segoe UI', sans-serif);
+    font-weight: 600;
+    font-style: normal;
+    letter-spacing: 0.025em;
+    color: var(--brand-wordmark-color, currentColor);
+}
+.nv-brand .nv-wordmark {
+    font-size: 13px;
+}
+.nv-welcome-wordmark img {
+    display: block;
+    width: 250px;
+    max-width: 100%;
+    height: auto;
+}

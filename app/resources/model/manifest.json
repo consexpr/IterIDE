@@ -1,0 +1,32 @@
+{
+    "schema": 1,
+    "model": "ranker.onnx",
+    "inputs": [
+        "context_bytes",
+        "context_kinds",
+        "candidate_bytes",
+        "candidate_kinds",
+        "features",
+        "candidate_mask",
+        "file_stats"
+    ],
+    "tokenizerVersion": "19.1.7",
+    "features": {
+        "context_tokens": 192,
+        "token_bytes": 48,
+        "candidate_bytes": 256
+    },
+    "checkpoint_sha256": "8bf96a3cf1cfc9aed1dca9d695ec2e6056531e88a901dcea0657f57b2d7c5fc6",
+    "onnxruntime": "1.22.0",
+    "unicodeVersion": "15.0.0",
+    "assets": {
+        "ranker.onnx": "90773aa4c6eb183be55e16168d36b9b7ceeec92921cf6f868de3ca19e227b111",
+        "runtime/LICENSE.txt": "2f07c72751aed99790b8a4869cf2311df85a860b22ded05fa22803587a48922c",
+        "runtime/ort-wasm-simd-threaded.mjs": "30dd851d9c00622940500f71ddd2ff8820c5cb65270816080175b958705385a8",
+        "runtime/ort-wasm-simd-threaded.wasm": "71aef04959c5c1b6de461b6538e2058e306610034a85aad2742d0c7fd4533fe4",
+        "runtime/ort.wasm.min.js": "65e09376df69107e881b5c34d2d37aed333a366b6d941073ec518168e269b87d",
+        "runtime/ThirdPartyNotices.txt": "e9e90971a8e75a9a8ac0c6412e29c1202d079998389915aa485f46c816c3b4cc",
+        "tokenizer.exe": "01a6fe49cd3c91bad13533dc1f38d49fd7748918d4e6352d828adf26b3eb6b87"
+    },
+    "trained_on": "CCF contestant C++ (oi-submissions/all-cpp): 10244 sources, 74868 training groups; 8 epochs (early stopped); PtrRank 2661749 parameters"
+}

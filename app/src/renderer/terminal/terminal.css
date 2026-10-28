@@ -1,0 +1,40 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+    background: #0c0c0c;
+    overflow: hidden;
+}
+body {
+    display: flex;
+    flex-direction: column;
+    font:
+        15px/1.4 'Cascadia Mono',
+        Consolas,
+        'Microsoft YaHei UI',
+        monospace;
+    color: #cccccc;
+}
+.bar {
+    flex: none;
+    height: 24px;
+    padding: 0 12px;
+    line-height: 24px;
+    white-space: pre;
+    overflow: hidden;
+}
+#screen {
+    flex: 1;
+    min-height: 0;
+    padding: 0 0 0 12px;
+}
+#screen .xterm {
+    height: 100%;
+}
+#screen .xterm-viewport {
+    background-color: transparent !important;
+    scrollbar-width: none;
+}
+#screen .xterm-viewport::-webkit-scrollbar {
+    display: none;
+}

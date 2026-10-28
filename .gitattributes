@@ -1,0 +1,14 @@
+* text=auto eol=lf
+*.onnx binary
+*.wasm binary
+*.exe binary
+*.mp4 binary
+*.png binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+
+# Keep upstream assets and regression inputs in their original formatting.
+app/resources/model/runtime/** -whitespace
+app/resources/testlib/** -whitespace
+app/src/main/debug/fixtures/** -whitespace

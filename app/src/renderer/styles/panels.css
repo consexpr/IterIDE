@@ -1,0 +1,994 @@
+/* Judge panel, test cards, debug panel */
+.nv-judge {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    flex: 1;
+}
+.nv-judge.is-drop {
+    outline: 1.5px dashed color-mix(in srgb, var(--accent) 70%, transparent);
+    outline-offset: -6px;
+    border-radius: var(--r);
+    background: color-mix(in srgb, var(--accent) 4%, transparent);
+}
+.nv-io.is-drop .nv-io-text {
+    border-color: var(--accent);
+    border-style: dashed;
+}
+.nv-judge.is-empty {
+    display: grid;
+    place-items: center;
+    color: var(--text-faint);
+    font-size: 12px;
+}
+.nv-judge-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px 12px;
+    flex: none;
+}
+
+.nv-summary {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 14px 10px;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+}
+.nv-summary b {
+    color: var(--text);
+}
+.nv-summary-bar {
+    display: flex;
+    gap: 2px;
+    flex: 1;
+    height: 6px;
+    max-width: 220px;
+    min-width: 0;
+    overflow: hidden;
+}
+.nv-summary > span {
+    white-space: nowrap;
+}
+.nv-summary-bar span {
+    flex: 1;
+    border-radius: 2px;
+    opacity: 0.85;
+}
+
+.nv-compile {
+    margin: 0 12px 10px;
+    border-radius: var(--r);
+    border: 1px solid var(--border);
+    background: var(--sunken);
+    flex: none;
+    max-height: 40%;
+    overflow: auto;
+}
+.nv-compile summary {
+    padding: 7px 10px;
+    cursor: pointer;
+    font-size: 12px;
+    color: var(--text-muted);
+    list-style: none;
+}
+.nv-compile.is-error summary {
+    color: var(--v-ce);
+}
+.nv-compile pre {
+    margin: 0;
+    padding: 0 10px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-word;
+    user-select: text;
+    color: var(--text-muted);
+}
+
+.nv-tests {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.nv-tests-windowed {
+    display: block;
+    min-height: 0;
+    overflow-anchor: none;
+}
+.nv-virtual-tests {
+    position: relative;
+    flex: none;
+}
+.nv-virtual-row {
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding-bottom: 6px;
+}
+.nv-tests-windowed > .nv-add-test {
+    width: 100%;
+    margin-top: 6px;
+}
+.nv-test-empty {
+    color: var(--text-muted);
+    padding: 12px 0;
+}
+.nv-test-head:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+    border-radius: var(--r);
+}
+.nv-test-head:focus-within .nv-test-tools {
+    opacity: 1;
+}
+.nv-panel-loading {
+    padding: 12px;
+    color: var(--text-muted);
+}
+.nv-loading-account {
+    padding: 24px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+}
+.nv-session-error {
+    color: var(--v-wa, #e79a9a);
+}
+.nv-io.has-comparison {
+    grid-column: 1 / -1;
+}
+.nv-output-comparison {
+    margin-top: 6px;
+    font-size: 12px;
+    min-width: 0;
+}
+.nv-output-comparison summary {
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 6px 0;
+}
+.nv-diff-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 6px;
+}
+.nv-diff-actions label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--text-muted);
+}
+.nv-diff-rule {
+    color: var(--text-muted);
+    margin: 6px 0;
+    line-height: 1.5;
+}
+.nv-diff-rows {
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    overflow: hidden;
+}
+.nv-diff-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 10px;
+    padding: 7px 9px;
+    border-bottom: 1px solid var(--border);
+}
+.nv-diff-row:last-child {
+    border-bottom: 0;
+}
+.nv-diff-row > div {
+    min-width: 0;
+}
+.nv-diff-row > div > span {
+    color: var(--text-muted);
+    font-size: 11px;
+}
+.nv-diff-row pre {
+    margin: 3px 0 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    user-select: text;
+    font-size: 12px;
+}
+.nv-diff-kind {
+    grid-column: 1 / -1;
+    font-size: 11px;
+    color: var(--text-muted);
+}
+.nv-diff-row:not(.is-same) {
+    background: color-mix(in srgb, var(--v-wa) 8%, var(--sunken));
+}
+.nv-diff-row[data-current] {
+    box-shadow: inset 3px 0 var(--accent);
+}
+
+.nv-test {
+    border-radius: var(--r);
+    background: var(--elevated);
+    border: 1px solid var(--border);
+    transition: border-color 0.15s;
+}
+.nv-test.is-focused {
+    border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+}
+.nv-test.is-disabled {
+    opacity: 0.55;
+}
+.nv-test-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 36px;
+    padding: 0 8px 0 11px;
+    cursor: pointer;
+}
+.nv-test-index {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+}
+.nv-test-name {
+    color: var(--text-faint);
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.nv-test-stats {
+    display: flex;
+    gap: 8px;
+    font-size: 11.5px;
+    color: var(--text-faint);
+    font-variant-numeric: tabular-nums;
+}
+.nv-verdict {
+    display: inline-grid;
+    place-items: center;
+    min-width: 38px;
+    height: 20px;
+    padding: 0 7px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: var(--tone);
+    background: color-mix(in srgb, var(--tone) 14%, transparent);
+}
+.nv-test-tools {
+    display: flex;
+    opacity: 0;
+    transition: opacity 0.12s;
+}
+.nv-test-head:hover .nv-test-tools {
+    opacity: 1;
+}
+.nv-test-caret {
+    color: var(--text-faint);
+    transition: transform 0.2s var(--ease);
+}
+.nv-test-caret.is-open {
+    transform: rotate(180deg);
+}
+.nv-test-body {
+    padding: 0 10px 10px;
+}
+.nv-io-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+.nv-io {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+.nv-io-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 22px;
+    font-size: 11px;
+    color: var(--text-faint);
+}
+.nv-io-label > span:first-child {
+    flex: 1;
+    letter-spacing: 0.04em;
+}
+.nv-compare-output {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    cursor: pointer;
+}
+.nv-compare-output input {
+    margin: 0;
+    width: 12px;
+    height: 12px;
+    accent-color: var(--accent);
+}
+.nv-compare-output:has(input:disabled) {
+    opacity: 0.5;
+    cursor: default;
+}
+.nv-io-text {
+    margin: 0;
+    min-height: 44px;
+    max-height: 260px;
+    overflow: auto;
+    padding: 7px 9px;
+    border-radius: var(--r-sm);
+    background: var(--sunken);
+    border: 1px solid var(--border);
+    font: 12.5px/1.5 var(--mono);
+    color: var(--text);
+    white-space: pre;
+    resize: none;
+    user-select: text;
+}
+textarea.nv-io-text {
+    overflow-y: auto;
+}
+.nv-io.is-err .nv-io-text {
+    color: color-mix(in srgb, var(--v-tle) 70%, var(--text));
+}
+.nv-diff {
+    display: inline-block;
+    min-width: 100%;
+    background: color-mix(in srgb, var(--v-wa) 16%, transparent);
+    box-shadow: inset 2px 0 0 var(--v-wa);
+}
+.nv-checker {
+    margin-top: 8px;
+    padding: 6px 9px;
+    border-radius: var(--r-sm);
+    font: 12px/1.5 var(--mono);
+    color: var(--tone);
+    background: color-mix(in srgb, var(--tone) 9%, transparent);
+    user-select: text;
+    white-space: pre-wrap;
+}
+.nv-interactor {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+.nv-interactor pre {
+    max-height: 160px;
+    overflow: auto;
+    background: var(--sunken);
+    padding: 7px 9px;
+    border-radius: var(--r-sm);
+    user-select: text;
+}
+
+.nv-add-test {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 38px;
+    padding: 0 12px;
+    border-radius: var(--r);
+    border: 1px dashed var(--border-strong);
+    color: var(--text-muted);
+}
+.nv-add-test:hover {
+    border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+    color: var(--text);
+}
+.nv-add-test .nv-faint {
+    font-size: 11.5px;
+    margin-left: auto;
+}
+
+/* ---- debug panel ---- */
+.nv-health-title {
+    margin: 0;
+    font-size: 15px;
+}
+.nv-health p {
+    margin: 6px 0 0;
+    line-height: 1.6;
+}
+.nv-health-checks {
+    display: grid;
+    gap: 8px;
+}
+.nv-health-check {
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--r-sm);
+    background: var(--sunken);
+}
+.nv-health-check.is-passed {
+    border-left: 3px solid var(--accent);
+}
+.nv-health-check.is-failed,
+.nv-health-check.is-warning {
+    border-left: 3px solid var(--v-wa);
+}
+.nv-health-check details {
+    margin-top: 8px;
+    font-size: 12px;
+}
+.nv-health-check summary {
+    cursor: pointer;
+    color: var(--text-muted);
+}
+.nv-health-check pre {
+    max-height: 160px;
+    overflow: auto;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    user-select: text;
+}
+.nv-health-notice {
+    padding: 9px 12px;
+    border-radius: var(--r-sm);
+    background: var(--sunken);
+    color: var(--v-wa);
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.nv-debug-status {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+.nv-debug-note {
+    padding: 0 14px 10px;
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+.nv-debug-error {
+    margin: 0 12px 8px;
+    padding: 8px 10px;
+    font-size: 12px;
+    color: var(--v-ce);
+    background: var(--sunken);
+    border-radius: var(--r-sm);
+    white-space: pre-wrap;
+    user-select: text;
+    max-height: 240px;
+    overflow: auto;
+}
+.nv-dsec {
+    border-top: 1px solid var(--border);
+}
+.nv-dsec-head {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+    height: 28px;
+    padding: 0 10px;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--text-faint);
+}
+.nv-dsec-head:hover {
+    color: var(--text-muted);
+}
+.nv-dsec-body {
+    padding-bottom: 8px;
+}
+.nv-dempty {
+    padding: 2px 16px;
+    font-size: 12px;
+}
+.nv-var {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    min-height: 22px;
+    padding: 1px 10px;
+    font: 12.5px/20px var(--mono);
+    cursor: default;
+}
+.nv-var:hover {
+    background: var(--hover);
+}
+.nv-var-name {
+    color: var(--accent);
+    flex: none;
+}
+.nv-var-name::after {
+    content: ':';
+    color: var(--text-faint);
+}
+.nv-var-value {
+    color: var(--text);
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    user-select: text;
+}
+.nv-var-type {
+    color: var(--text-faint);
+    font-size: 11px;
+    max-width: 40%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.nv-watch-input {
+    width: calc(100% - 20px);
+    margin: 4px 10px 0;
+    font: 12px var(--mono);
+    padding: 4px 8px;
+}
+.nv-frame {
+    display: flex;
+    gap: 4px;
+    padding: 2px 16px;
+    font: 12px/20px var(--mono);
+}
+.nv-frame-fn {
+    color: var(--text);
+}
+.nv-debug-stream {
+    margin: 0 10px;
+    padding: 7px 9px;
+    max-height: 220px;
+    overflow: auto;
+    font-size: 12px;
+    line-height: 1.5;
+    background: var(--sunken);
+    border-radius: var(--r-sm);
+    white-space: pre-wrap;
+    user-select: text;
+}
+.nv-debug-stream.is-err {
+    color: color-mix(in srgb, var(--v-tle) 70%, var(--text));
+}
+
+/* ---- judge mode badges / info bar ---- */
+.nv-modebar {
+    padding: 0 12px 10px;
+}
+.nv-modebar[data-flash] .nv-badges {
+    animation: nv-modeflash 1.4s ease-out;
+}
+@keyframes nv-modeflash {
+    0%,
+    30% {
+        background: color-mix(in srgb, var(--accent) 14%, transparent);
+    }
+}
+.nv-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 2px;
+    border-radius: var(--r);
+}
+.nv-badges.is-clickable {
+    cursor: pointer;
+}
+.nv-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    height: 22px;
+    padding: 0 9px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    background: color-mix(in srgb, var(--text) 6%, transparent);
+    color: var(--text-muted);
+    white-space: nowrap;
+    max-width: 100%;
+}
+.nv-badge-value {
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-variant-numeric: tabular-nums;
+}
+.nv-badge.is-mode {
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 13%, transparent);
+    font-weight: 600;
+}
+.nv-badge.tone-warn {
+    color: var(--v-tle);
+    background: color-mix(in srgb, var(--v-tle) 12%, transparent);
+}
+.nv-badge.tone-error {
+    color: var(--v-wa);
+    background: color-mix(in srgb, var(--v-wa) 12%, transparent);
+}
+.nv-badge.tone-warn .nv-badge-value,
+.nv-badge.tone-error .nv-badge-value {
+    color: inherit;
+}
+.nv-badges.is-dark .nv-badge {
+    background: var(--island-btn);
+    color: var(--island-dim);
+}
+.nv-badges.is-dark .nv-badge-value {
+    color: var(--island-fg);
+}
+.nv-badges.is-dark .nv-badge.is-mode {
+    color: var(--island-fg);
+    background: var(--island-btn-hover);
+}
+
+/* ---- debug panel pages (Red Panda style) ---- */
+.nv-debug {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    flex: 1;
+    overflow: hidden;
+    padding-bottom: 0;
+}
+.nv-dtabs {
+    display: flex;
+    gap: 2px;
+    padding: 0 10px 6px;
+    overflow-x: auto;
+    flex: none;
+}
+.nv-dtabs::-webkit-scrollbar {
+    height: 0;
+}
+.nv-dtabs button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    height: 24px;
+    padding: 0 9px;
+    border-radius: var(--r-sm);
+    font-size: 12px;
+    color: var(--text-faint);
+    white-space: nowrap;
+}
+.nv-dtabs button:hover {
+    color: var(--text-muted);
+}
+.nv-dtabs button.is-on {
+    color: var(--text);
+    background: var(--hover);
+}
+.nv-dtab-count {
+    font-size: 10.5px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--v-wa) 18%, transparent);
+    color: var(--v-wa);
+}
+.nv-dpage {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    border-top: 1px solid var(--border);
+    padding: 6px 0 10px;
+}
+.nv-dsub {
+    margin: 12px 10px 4px;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--text-faint);
+}
+.nv-var-value.is-editable {
+    cursor: text;
+}
+.nv-var-value.is-editable:hover {
+    text-decoration: underline dotted var(--text-faint);
+}
+.nv-var-edit {
+    flex: 1;
+    min-width: 0;
+    height: 20px;
+    padding: 0 6px;
+    font: 12.5px var(--mono);
+}
+.nv-watch-clear {
+    margin: 6px 10px 0;
+}
+.nv-wp-add {
+    display: flex;
+    gap: 6px;
+    padding: 4px 10px 0;
+}
+.nv-wp-add input {
+    flex: 1;
+    min-width: 0;
+    height: 28px;
+    font: 12px var(--mono);
+}
+.nv-wp-add select {
+    height: 28px;
+}
+.nv-wp-add .nv-btn {
+    height: 28px;
+}
+.nv-frame {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    width: 100%;
+    padding: 3px 12px;
+    text-align: left;
+    font: 12px/20px var(--mono);
+}
+.nv-frame:hover {
+    background: var(--hover);
+}
+.nv-frame.is-on {
+    background: var(--selection);
+}
+.nv-frame-level {
+    color: var(--text-faint);
+    min-width: 22px;
+}
+.nv-frame-fn {
+    flex: 1;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.nv-bps {
+    display: flex;
+    flex-direction: column;
+}
+.nv-bprow {
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--border);
+}
+.nv-bprow.is-editing {
+    background: color-mix(in srgb, var(--accent) 7%, transparent);
+}
+.nv-bprow-main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+}
+.nv-bprow-loc {
+    font-family: var(--mono);
+    color: var(--text);
+}
+.nv-bprow-loc:hover {
+    color: var(--accent);
+}
+.nv-bprow-props {
+    display: flex;
+    gap: 6px;
+    margin-top: 6px;
+    padding-left: 22px;
+}
+.nv-bprow-props input {
+    flex: 1;
+    min-width: 0;
+    height: 26px;
+    padding: 0 8px;
+    font-size: 12px !important;
+}
+.nv-bprow-props input.is-narrow {
+    flex: none;
+    width: 76px;
+}
+.nv-mem-bar,
+.nv-cpu-bar {
+    display: flex;
+    gap: 6px;
+    padding: 2px 10px 8px;
+}
+.nv-mem-bar input {
+    flex: 1;
+    min-width: 0;
+    height: 28px;
+}
+.nv-mem-bar select {
+    height: 28px;
+}
+.nv-hexdump {
+    margin: 0 10px;
+    padding: 8px 10px;
+    border-radius: var(--r-sm);
+    background: var(--sunken);
+    font: 11.5px/1.6 var(--mono);
+    overflow-x: auto;
+    user-select: text;
+}
+.nv-cpu {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+.nv-asm {
+    margin: 0 10px;
+    max-height: 340px;
+    overflow: auto;
+    border-radius: var(--r-sm);
+    background: var(--sunken);
+    padding: 6px 0;
+    font: 11.5px/1.65 var(--mono);
+}
+.nv-asm-src {
+    padding: 4px 10px 0;
+    color: var(--accent);
+    font-size: 11px;
+}
+.nv-asm-row {
+    display: flex;
+    gap: 12px;
+    padding: 0 10px;
+    white-space: pre;
+}
+.nv-asm-row.is-current {
+    background: var(--editor-debug-line);
+}
+.nv-asm-text {
+    color: var(--text);
+}
+.nv-regs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 2px 12px;
+    margin: 10px 10px 0;
+    font: 11.5px/1.7 var(--mono);
+    color: var(--text-muted);
+}
+.nv-regs b {
+    color: var(--text-faint);
+    font-weight: 500;
+    display: inline-block;
+    min-width: 34px;
+}
+.nv-regs .is-changed {
+    color: var(--v-tle);
+}
+.nv-console {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 220px;
+}
+.nv-console-log {
+    flex: 1;
+    margin: 0 10px;
+    padding: 8px 10px;
+    border-radius: var(--r-sm);
+    background: var(--sunken);
+    font: 12px/1.55 var(--mono);
+    overflow: auto;
+    white-space: pre-wrap;
+    user-select: text;
+}
+.nv-console-log .is-echo {
+    color: var(--accent);
+}
+.nv-console-log .is-error {
+    color: var(--v-wa);
+}
+.nv-console-input {
+    margin: 6px 10px 0;
+    height: 30px;
+}
+.nv-dock {
+    flex: none;
+    border-top: 1px solid var(--border);
+}
+.nv-dock-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    padding: 0 10px 10px;
+}
+.nv-dock-body .nv-debug-stream {
+    margin: 0;
+    max-height: 150px;
+    min-height: 46px;
+}
+.nv-preset-label {
+    font-size: 12px;
+    align-self: center;
+}
+.nv-bp-cond::before {
+    background: var(--v-tle);
+    box-shadow: none;
+}
+.nv-debug-line.is-frame {
+    background: color-mix(in srgb, var(--editor-debug-line) 55%, transparent);
+}
+
+.nv-bprow-props .is-invalid {
+    border-color: var(--v-wa);
+}
+.nv-bprow-error {
+    padding: 4px 0 0 28px;
+    font-size: 11.5px;
+    color: var(--v-wa);
+    overflow-wrap: anywhere;
+}
+
+/* gutter right-click menu: same colours as Monaco's own context menu */
+.nv-gmenu {
+    position: fixed;
+    z-index: 60;
+    min-width: 200px;
+    padding: 4px 0;
+    border: 1px solid var(--vscode-menu-border, var(--border));
+    border-radius: var(--r-sm);
+    background: var(--vscode-menu-background, var(--sunken));
+    color: var(--vscode-menu-foreground, var(--text));
+    box-shadow: 0 6px 20px rgb(0 0 0 / 0.28);
+    font-size: 13px;
+}
+.nv-gmenu-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    width: 100%;
+    padding: 5px 14px;
+    text-align: left;
+}
+.nv-gmenu-item:hover {
+    background: var(--vscode-menu-selectionBackground, var(--hover));
+    color: var(--vscode-menu-selectionForeground, inherit);
+}
+.nv-gmenu-key {
+    opacity: 0.7;
+}
+.nv-gmenu-sep {
+    height: 1px;
+    margin: 4px 0;
+    background: var(--vscode-menu-separatorBackground, var(--border));
+}
+
+/* replay timeline under the debug status line */
+.nv-timeline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 12px 8px;
+}
+.nv-timeline input[type='range'] {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    padding: 0;
+    border: 0;
+    border-radius: 999px;
+    background: linear-gradient(to right, var(--accent) var(--pct), var(--border-strong) var(--pct));
+    cursor: pointer;
+}
+.nv-timeline input[type='range']::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--text);
+    border: 2px solid var(--elevated);
+    box-shadow: 0 0 0 1px var(--border-strong);
+}
+.nv-timeline-at {
+    min-width: 64px;
+    text-align: right;
+    font-size: 11.5px;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-faint);
+}

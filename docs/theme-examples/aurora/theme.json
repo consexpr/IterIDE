@@ -1,0 +1,34 @@
+{
+    "id": "aurora",
+    "name": "Aurora 极光",
+    "kind": "dark",
+    "extends": "iter-dusk",
+    "ui": {
+        "bg": "#0c1015",
+        "panel": "#10151b",
+        "elevated": "#151b23",
+        "sunken": "#0b0f13",
+        "border": "#1c242e",
+        "borderStrong": "#283341",
+        "accent": "#7fd6c2",
+        "accentText": "#06201a",
+        "selection": "rgba(127,214,194,0.18)"
+    },
+    "editor": {
+        "background": "#0e1217",
+        "lineHighlight": "#121820",
+        "selection": "#1d3a3a",
+        "cursor": "#9be8d6"
+    },
+    "highlight": {
+        "findCurrent": "#7fd6c235",
+        "findOther": "#7fd6c237"
+    },
+    "tokens": {
+        "keyword": "#b59cf0",
+        "keyword.control": "#c9a8ff",
+        "function": "#7fd6c2",
+        "comment": "#566273 italic"
+    },
+    "shape": { "radius": "10px", "radiusLg": "14px", "islandRadius": "14px" }
+}

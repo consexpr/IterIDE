@@ -1,0 +1,93 @@
+/* Find/replace shares the editor's theme, with direct controls and no widget-specific CSS overrides. */
+:root {
+    --search-background: color-mix(in srgb, var(--elevated) 82%, transparent);
+    --search-input-background: color-mix(in srgb, var(--sunken) 55%, transparent);
+    --search-border: var(--border-strong);
+    --search-shadow: 0 4px 14px color-mix(in srgb, var(--bg) 24%, transparent);
+    --search-backdrop-filter: blur(8px);
+    --search-radius: var(--r-sm);
+    --search-width: 440px;
+    --search-control-height: 26px;
+    --search-open-duration: 220ms;
+    --search-close-duration: 150ms;
+    --search-easing: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --search-offset: 5px;
+    --search-scale: 0.98;
+}
+.nv-find {
+    position: absolute;
+    z-index: 12;
+    top: 6px;
+    right: 14px;
+    width: var(--search-width);
+    max-width: calc(100% - 28px);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px;
+    border: 1px solid var(--search-border);
+    border-radius: var(--search-radius);
+    background: var(--search-background);
+    backdrop-filter: var(--search-backdrop-filter);
+    box-shadow: var(--search-shadow);
+    transform-origin: top right;
+    font: 12px/1.4 var(--ui-font);
+}
+.nv-find-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.nv-find-row > input {
+    flex: 1;
+    min-width: 0;
+    height: var(--search-control-height);
+    background: var(--search-input-background);
+    padding: 2px 7px;
+}
+.nv-find-row > button {
+    flex: none;
+    height: var(--search-control-height);
+}
+.nv-find-count {
+    flex: none;
+    min-width: 44px;
+    text-align: center;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+    font-size: 11px;
+}
+.nv-find [aria-label='上一个'] .nv-icon {
+    transform: rotate(180deg);
+}
+.nv-find-options {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    color: var(--text-muted);
+    font-size: 11.5px;
+}
+.nv-find-options label {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+}
+.nv-find-options input {
+    width: 12px;
+    height: 12px;
+}
+.nv-find-error {
+    color: var(--v-wa);
+}
+.nv-find button:focus-visible {
+    outline: 1px solid var(--accent);
+    outline-offset: -1px;
+}
+.nv-search-match {
+    background: var(--vscode-editor-findMatchHighlightBackground, var(--selection));
+}
+.nv-search-match.is-current {
+    background: var(--vscode-editor-findMatchBackground, var(--selection));
+}

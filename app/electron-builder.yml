@@ -1,0 +1,56 @@
+# Use ITER's own installer identity and default installation directory.
+appId: dev.iter.editor
+productName: ITER
+executableName: ITER
+directories:
+    output: dist
+    buildResources: build
+asar: true
+# Reuse the exact Electron distribution installed by npm ci (package-lock.json).
+electronDist: node_modules/electron/dist
+files:
+    - out/**
+    - package.json
+extraResources:
+    - from: build/icon.png
+      to: icon.png
+    - from: resources/model
+      to: model
+      filter:
+          - ranker.onnx
+          - manifest.json
+          - tokenizer.exe
+          - runtime/**
+    - from: resources/toolchain
+      to: toolchain
+    - from: resources/testlib
+      to: testlib
+    - from: resources/runner
+      to: runner
+      filter:
+          - runner.cpp
+          - runner.exe
+win:
+    icon: build/icon.ico
+    target:
+        - target: nsis
+          arch: [x64]
+    artifactName: ITER-Setup-${version}.${ext}
+    fileAssociations:
+        - ext: cpp
+          name: C++ Source File
+          description: C++ source code
+          role: Editor
+          icon: build/icon.ico
+nsis:
+    oneClick: false
+    perMachine: false
+    allowElevation: false
+    allowToChangeInstallationDirectory: true
+    createDesktopShortcut: true
+    createStartMenuShortcut: true
+    shortcutName: ITER
+    installerLanguages: [en_US, zh_CN]
+    displayLanguageSelector: true
+    runAfterFinish: true
+    deleteAppDataOnUninstall: false

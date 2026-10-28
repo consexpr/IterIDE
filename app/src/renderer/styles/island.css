@@ -1,0 +1,610 @@
+/* Dynamic island. Always a near-black capsule (themes may override --island-bg / --island-fg).
+   Size is driven by a JS spring (ui/island/spring.ts); content crossfades with blur + scale. */
+:root {
+    --island-bg: #000;
+    --island-fg: #f5f5f7;
+    --island-dim: rgba(245, 245, 247, 0.55);
+    --island-btn: rgba(255, 255, 255, 0.09);
+    --island-btn-hover: rgba(255, 255, 255, 0.17);
+    /* Density of the expanded panel: themes can make it airier or tighter. */
+    --island-pad: 10px 14px;
+    --island-gap: 6px;
+    --island-ctl: 26px;
+    --island-ctl-radius: 8px;
+}
+
+.nvi-slot {
+    position: relative;
+    justify-self: center;
+    width: 640px;
+    max-width: 50vw;
+    height: 38px;
+    pointer-events: none;
+}
+.nvi {
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 30;
+    overflow: hidden;
+    contain: layout paint;
+    will-change: width, height;
+    border-radius: min(var(--nvi-r, 19px), var(--r-island));
+    background: var(--island-bg);
+    color: var(--island-fg);
+    font-size: 12.5px;
+    box-shadow:
+        0 6px 20px rgba(0, 0, 0, 0.22),
+        inset 0 0 0 0.5px rgba(255, 255, 255, 0.06);
+    pointer-events: auto;
+    -webkit-app-region: no-drag;
+    transition: box-shadow 0.35s ease;
+}
+.nvi.is-clickable {
+    cursor: pointer;
+}
+/* Tone shows only as a hairline edge — no glow, comfortable for long sessions. */
+.nvi[data-tone='ac'] {
+    box-shadow:
+        0 6px 20px rgba(0, 0, 0, 0.22),
+        inset 0 0 0 1px color-mix(in srgb, var(--v-ac) 28%, transparent);
+}
+.nvi[data-tone='wa'],
+.nvi[data-tone='re'],
+.nvi[data-tone='ce'],
+.nvi[data-tone='crash'],
+.nvi[data-tone='tle'],
+.nvi[data-tone='mle'] {
+    box-shadow:
+        0 6px 20px rgba(0, 0, 0, 0.22),
+        inset 0 0 0 1px color-mix(in srgb, var(--v-wa) 28%, transparent);
+}
+
+/* content layers */
+.nvi-layer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: var(--nvi-layer-w, 100%);
+    margin-left: calc(var(--nvi-layer-w, 100%) / -2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 14px;
+    white-space: nowrap;
+}
+.nvi-layer.is-in {
+    animation: nvi-in 0.34s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+.nvi-layer.is-out {
+    animation: nvi-out 0.2s ease-in both;
+    pointer-events: none;
+}
+@keyframes nvi-in {
+    from {
+        opacity: 0;
+        filter: blur(3px);
+        transform: scale(0.94);
+    }
+}
+@keyframes nvi-out {
+    to {
+        opacity: 0;
+        filter: blur(3px);
+        transform: scale(1.04);
+    }
+}
+/* The expanded panel is large: fading it is smooth, blurring it is not. */
+.nvi-layer.is-panel.is-in {
+    animation-name: nvi-panel-in;
+}
+.nvi-layer.is-panel.is-out {
+    animation: nvi-panel-out 0.22s ease both;
+}
+@keyframes nvi-panel-out {
+    to {
+        opacity: 0;
+        transform: scale(0.97);
+    }
+}
+@keyframes nvi-panel-in {
+    from {
+        opacity: 0;
+        transform: scale(0.97);
+    }
+}
+.nvi-measure {
+    position: absolute;
+    visibility: hidden;
+    pointer-events: none;
+    white-space: nowrap;
+    font-size: 12.5px;
+    top: 0;
+    left: 0;
+}
+.nvi-measure > div {
+    display: inline-flex;
+}
+
+/* compact rows */
+.nvi-row {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+.nvi-split {
+    gap: 40px;
+}
+.nvi-title {
+    font-weight: 600;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.nvi-meta,
+.nvi-dim {
+    color: var(--island-dim);
+    font-variant-numeric: tabular-nums;
+}
+.nvi-tag {
+    font-size: 10.5px;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 999px;
+    background: var(--island-btn);
+    color: var(--island-dim);
+}
+.nvi-count {
+    font-weight: 650;
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+}
+.nvi-led {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex: none;
+    background: var(--tone, var(--island-dim));
+}
+.nvi-led.is-paused {
+    --tone: var(--v-tle);
+    animation: nvi-breathe 1.8s ease-in-out infinite;
+}
+.nvi-led.is-busy {
+    --tone: var(--island-fg);
+    animation: nvi-breathe 1.6s ease-in-out infinite;
+}
+.nvi-led.is-live {
+    --tone: var(--v-ac);
+    animation: nvi-breathe 1s ease-in-out infinite;
+}
+@keyframes nvi-breathe {
+    50% {
+        opacity: 0.45;
+    }
+}
+
+/* progress ring */
+.nvi-ring {
+    flex: none;
+    transform: rotate(-90deg);
+}
+.nvi-ring circle {
+    fill: none;
+    stroke-width: 2.4;
+}
+.nvi-ring-track {
+    stroke: rgba(255, 255, 255, 0.16);
+}
+.nvi-ring-fill {
+    stroke: var(--v-ac);
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+.nvi-ring.is-bad .nvi-ring-fill {
+    stroke: var(--v-wa);
+}
+/* result pop */
+.nvi-result {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.nvi-badge {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    color: var(--tone);
+    background: color-mix(in srgb, var(--tone) 14%, transparent);
+    animation: nvi-badge 0.5s cubic-bezier(0.3, 1.8, 0.5, 1) both 0.05s;
+}
+@keyframes nvi-badge {
+    from {
+        transform: scale(0.4);
+    }
+}
+.nvi-result-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+    padding-right: 6px;
+}
+.nvi-result-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--tone);
+}
+.nvi-result-sub {
+    font-size: 11.5px;
+    color: var(--island-dim);
+    font-variant-numeric: tabular-nums;
+}
+
+/* debug controls */
+.nvi-debug {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+}
+.nvi-debug-where {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 92px;
+}
+.nvi-line {
+    font-size: 17px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+.nvi-line::before {
+    content: 'L';
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--island-dim);
+    margin-right: 2px;
+}
+.nvi-line-sub {
+    font-size: 11px;
+    color: var(--island-dim);
+}
+.nvi[data-tone='crash'] .nvi-line-sub {
+    color: var(--v-wa);
+    font-weight: 600;
+}
+.nvi-debug-ctrl {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.nvi-btn {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--island-btn);
+    color: var(--island-fg);
+    transition:
+        background 0.15s,
+        transform 0.25s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+.nvi-btn:hover:not(:disabled) {
+    background: var(--island-btn-hover);
+    transform: scale(1.08);
+}
+.nvi-btn:active:not(:disabled) {
+    transform: scale(0.9);
+}
+.nvi-btn:disabled {
+    opacity: 0.28;
+}
+.nvi-btn.is-stop:hover {
+    background: color-mix(in srgb, var(--v-wa) 40%, transparent);
+}
+.nvi-sep {
+    width: 1px;
+    height: 16px;
+    margin: 0 4px;
+    background: rgba(255, 255, 255, 0.14);
+}
+
+/* ---- expanded island: judge settings panel ---- */
+.nvi.is-open {
+    cursor: default;
+    box-shadow:
+        0 18px 48px rgba(0, 0, 0, 0.38),
+        inset 0 0 0 0.5px rgba(255, 255, 255, 0.07);
+}
+.nvi-layer.is-panel {
+    /* Measure/scroll at the final layout size, never at the spring's transient height. */
+    bottom: auto;
+    max-height: 80vh;
+    align-items: stretch;
+    justify-content: stretch;
+    padding: 0;
+    white-space: normal;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.nvi-layer.is-panel > div {
+    width: 100%;
+    align-self: flex-start; /* Keep the measured content independent of the animated shell height. */
+}
+.nvi-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--island-gap);
+    padding: var(--island-pad);
+    font-size: 12.5px;
+    color: var(--island-fg);
+}
+.nvi-controls {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+}
+.nvi-mode-controls {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    align-items: center;
+    gap: 8px;
+}
+.nvi-run-kind {
+    flex: 1;
+}
+.nvi-checker-kind {
+    flex: 1.5;
+    animation: nvi-control-in 0.18s ease-out;
+}
+@keyframes nvi-control-in {
+    from {
+        opacity: 0;
+    }
+}
+.nvi-mode-controls > .nvi-seg {
+    min-width: 0;
+    flex-wrap: nowrap;
+    overflow: hidden;
+}
+.nvi-settings-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--island-gap);
+}
+.nvi-controls:disabled {
+    opacity: 0.55;
+}
+.nvi-toggle:has(input:disabled) {
+    opacity: 0.5;
+}
+.nvi-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+.nvi-check-status {
+    display: grid;
+    place-items: center;
+    width: 12px;
+    flex: 0 0 12px;
+}
+.nvi-x {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: var(--island-ctl);
+    height: var(--island-ctl);
+    border-radius: 50%;
+    background: var(--island-btn);
+    color: var(--island-dim);
+}
+.nvi-x:hover {
+    background: var(--island-btn-hover);
+    color: var(--island-fg);
+}
+.nvi-panel input {
+    height: var(--island-ctl);
+    padding: 0 9px;
+    border: 0;
+    border-radius: var(--island-ctl-radius);
+    background: var(--island-btn);
+    color: var(--island-fg);
+    font: inherit;
+    outline: none;
+}
+.nvi-panel input:focus {
+    background: var(--island-btn-hover);
+}
+.nvi-params {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--island-gap) 14px;
+}
+.nvi-field {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.nvi-field > span {
+    color: var(--island-dim);
+}
+.nvi-field input {
+    width: 66px;
+    min-width: 0;
+    font-variant-numeric: tabular-nums;
+}
+.nvi-field em {
+    font-style: normal;
+    color: var(--island-dim);
+}
+.nvi-field.is-link {
+    min-width: 0;
+}
+.nvi-field.is-link input {
+    flex: 1;
+    width: auto;
+    font-size: 12px;
+}
+.nvi-seg {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    padding: 2px;
+    border-radius: calc(var(--island-ctl-radius) + 2px);
+    background: var(--island-btn);
+}
+.nvi-seg button {
+    flex: 1;
+    height: calc(var(--island-ctl) - 4px);
+    border-radius: var(--island-ctl-radius);
+    color: var(--island-dim);
+    white-space: nowrap;
+}
+.nvi-seg button.is-on {
+    background: var(--island-btn-hover);
+    color: var(--island-fg);
+    font-weight: 600;
+}
+.nvi-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+.nvi-chips button,
+.nvi-file button,
+.nvi-io button {
+    height: calc(var(--island-ctl) - 2px);
+    padding: 0 10px;
+    border-radius: 999px;
+    background: var(--island-btn);
+    color: var(--island-dim);
+    transition:
+        background 0.15s,
+        color 0.15s;
+}
+.nvi-chips button:hover,
+.nvi-file button:hover,
+.nvi-io button:hover {
+    background: var(--island-btn-hover);
+    color: var(--island-fg);
+}
+.nvi-chips button.is-on {
+    background: var(--island-fg);
+    color: var(--island-bg);
+    font-weight: 600;
+}
+.nvi-file {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.nvi-file > span {
+    color: var(--island-dim);
+    min-width: 46px;
+}
+.nvi-file code {
+    flex: 1;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.nvi-io {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.nvi-io:empty {
+    display: none;
+}
+.nvi-io input {
+    flex: 1;
+    min-width: 0;
+    font-family: var(--mono);
+    font-size: 12px;
+}
+.nvi-arrow {
+    color: var(--island-dim);
+}
+.nvi-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    color: var(--island-dim);
+}
+.nvi-toggle input {
+    width: 14px;
+    height: 14px;
+    padding: 0;
+    accent-color: var(--accent);
+}
+.nvi-mode-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.nvi-mode-content:empty {
+    display: none;
+}
+.nvi-checker {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.nvi-checker-note {
+    color: var(--island-dim);
+    white-space: nowrap;
+}
+.nvi-checker .nvi-file > code {
+    min-width: 0;
+}
+.nvi-description-error {
+    flex: none;
+    color: var(--v-wa, currentColor);
+}
+.nvi-panel :is(.nvi-x, button) {
+    transition:
+        background 0.18s,
+        color 0.18s,
+        opacity 0.18s,
+        transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.nvi-panel button:active:not(:disabled) {
+    transform: scale(0.95);
+}
+.nvi-panel button:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+.nvi-panel :is(input, button):focus-visible {
+    outline: 2px solid var(--island-dim);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nvi-layer.is-out {
+        visibility: hidden;
+    }
+    .nvi-layer.is-in,
+    .nvi-layer.is-out,
+    .nvi-badge,
+    .nvi-led {
+        animation: none;
+    }
+    .nvi,
+    .nvi *,
+    .nvi *::after {
+        transition: none !important;
+        animation: none !important;
+    }
+}

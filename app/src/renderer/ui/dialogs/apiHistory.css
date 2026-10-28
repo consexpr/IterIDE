@@ -1,0 +1,54 @@
+.nv-api-history p {
+    margin: 0;
+}
+.nv-api-toolbar,
+.nv-api-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.nv-api-toolbar .nv-btn,
+.nv-api-row .nv-btn {
+    margin-left: auto;
+}
+.nv-api-row {
+    flex-wrap: wrap;
+    font-size: 12px;
+}
+.nv-api-row time {
+    color: var(--text-muted);
+}
+.nv-api-model {
+    overflow-wrap: anywhere;
+}
+.nv-api-call {
+    border-bottom: 1px solid var(--border);
+    padding: 6px 0;
+    min-width: 0;
+}
+.nv-api-call summary {
+    cursor: pointer;
+    font-size: 12px;
+    padding: 4px 0;
+}
+.nv-api-call pre {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    max-height: 200px;
+    overflow: auto;
+    background: var(--bg);
+    padding: 8px;
+    font-size: 12px;
+    user-select: text;
+}
+.nv-api-call section {
+    margin-top: 8px;
+}
+.nv-api-meta {
+    overflow-wrap: anywhere;
+    font-size: 12px;
+    padding-top: 8px;
+}
+.nv-api-error {
+    color: var(--error, #e86868);
+}

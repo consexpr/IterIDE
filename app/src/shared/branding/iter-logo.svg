@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="60 70 495 240" width="495" height="240">
+    <title>ITER logo</title>
+    <style>
+        :root {
+            color: #1e1b18;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                color: #f3ede2;
+            }
+        }
+    </style>
+    <g transform="translate(5 -19)">
+        <circle
+            cx="90"
+            cy="124"
+            r="26"
+            fill="none"
+            stroke="currentColor"
+            stroke-opacity="0.6"
+            stroke-width="3.5"
+            stroke-linecap="round"
+            stroke-dasharray="0 8"
+        />
+        <circle cx="106.7" cy="104.1" r="4.5" fill="none" stroke="currentColor" stroke-width="2.5" />
+        <circle cx="114.4" cy="132.9" r="7.5" fill="#F0A830" />
+        <circle cx="90" cy="150" r="15" fill="#E4572E" />
+        <g fill="currentColor" fill-opacity="0.6">
+            <circle cx="244" cy="195" r="3.5" />
+            <circle cx="257" cy="195" r="3.5" />
+        </g>
+        <path
+            d="M271 179 L287 195 L271 211"
+            fill="none"
+            stroke="#E4572E"
+            stroke-width="8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        />
+        <g fill="none" stroke="currentColor" stroke-width="30" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M90 195 V305" />
+            <path d="M170 140 V280 Q170 305 195 305 H205" />
+            <path d="M145 195 H215" />
+            <g transform="translate(45 0)">
+                <path d="M245 250 H355 A55 55 0 1 0 342.1 285.4" />
+                <path d="M420 305 V245 A50 50 0 0 1 470 195 H480" />
+            </g>
+        </g>
+    </g>
+</svg>

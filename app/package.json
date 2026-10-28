@@ -1,0 +1,78 @@
+{
+    "name": "iter",
+    "version": "1.0.5",
+    "description": "ITER — a competitive programming editor for OI/ICPC",
+    "main": "out/main/index.js",
+    "scripts": {
+        "setup": "npm run fetch-toolchain && npm run make-icon && npm run build-runner && npm run build-model-tokenizer",
+        "dev": "electron-vite dev",
+        "build": "electron-vite build",
+        "start": "electron-vite preview",
+        "typecheck": "tsc -p tsconfig.json",
+        "test": "node scripts/run-tests.mjs",
+        "check": "npm run format:check && npm run typecheck && npm test && npm run build && npm run check:repo",
+        "check:repo": "node scripts/check-repo.mjs",
+        "export:github": "node scripts/export-github.mjs",
+        "verify:security": "electron scripts/verify-security.cjs",
+        "fetch-toolchain": "node scripts/fetch-toolchain.mjs",
+        "build-runner": "node scripts/build-runner.mjs",
+        "build-model-tokenizer": "node scripts/build-model-tokenizer.mjs",
+        "make-icon": "node scripts/make-icon.mjs",
+        "predist:win": "npm run setup && npm run check:release",
+        "dist:win": "electron-builder --win nsis",
+        "verify:win": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-win.ps1",
+        "verify:isolated": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-isolated.ps1",
+        "test:full": "npm run build && node scripts/run-tests.mjs --full",
+        "format": "node scripts/format.mjs --write",
+        "format:check": "node scripts/format.mjs --check",
+        "format:powershell": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/format-powershell.ps1",
+        "format:powershell:check": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/format-powershell.ps1 -Check",
+        "verify:release": "electron scripts/verify-release.cjs",
+        "check:release": "npm run check && npm run verify:security && npm run verify:release"
+    },
+    "private": true,
+    "keywords": [
+        "competitive-programming",
+        "cpp",
+        "editor",
+        "oi",
+        "icpc"
+    ],
+    "author": "ITER contributors",
+    "license": "MIT",
+    "devDependencies": {
+        "@resvg/resvg-js": "2.6.2",
+        "@types/node": "^26.6.5",
+        "@types/react": "^19.3.0",
+        "@types/react-dom": "^19.3.0",
+        "@types/yauzl": "^3.4.0",
+        "@vitejs/plugin-react": "^6.1.2",
+        "@xterm/addon-fit": "0.11.0",
+        "@xterm/xterm": "6.0.0",
+        "7zip-bin": "5.2.0",
+        "electron": "^44.9.0",
+        "electron-builder": "26.15.3",
+        "electron-vite": "^6.0.0",
+        "monaco-editor": "^0.57.0",
+        "pe-library": "0.4.1",
+        "png-to-ico": "3.0.2",
+        "prettier": "3.6.2",
+        "react": "^19.3.1",
+        "react-dom": "^19.3.1",
+        "typescript": "^7.0.2",
+        "vite": "^8.3.4",
+        "vitest": "^5.0.5"
+    },
+    "dependencies": {
+        "yauzl": "^3.4.0"
+    },
+    "engines": {
+        "node": ">=24.0.0"
+    },
+    "overrides": {
+        "dompurify": "3.4.17",
+        "@electron/get": {
+            "global-agent": "4.1.3"
+        }
+    }
+}

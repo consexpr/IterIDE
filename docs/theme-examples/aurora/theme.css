@@ -1,0 +1,19 @@
+/* Aurora: soft gradient chrome, accent edge on the island while debugging. Uses only the documented contract. */
+.nv-titlebar {
+    background: linear-gradient(90deg, #10151b, #121a22 50%, #10151b);
+}
+:root {
+    --island-bg: #070b0f;
+}
+.nv-app[data-debug='paused'] .nvi {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+.nv-test[data-verdict='WA'],
+.nv-test[data-verdict='RE'],
+.nv-test[data-verdict='TLE'] {
+    box-shadow: inset 3px 0 0 var(--v-wa);
+}
+.nv-side-tabs button.is-on {
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
+    color: var(--accent);
+}
